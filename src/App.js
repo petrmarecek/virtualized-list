@@ -1,14 +1,14 @@
 import './App.css';
 import React from "react";
 
-import {useVirtualizer} from "@tanstack/react-virtual";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
 import { createStore } from '@reduxjs/toolkit';
 
 
-function dataReducer(state = {value: []}, action){
-    if(action.type === "add"){
-        state.value.push({id: state.value.length, subject: "ukol" + state.value.length});
+function dataReducer(state = { value: [] }, action) {
+    if (action.type === "add") {
+        state.value.push({ id: state.value.length, subject: "ukol" + state.value.length });
         return state;
     }
 }
@@ -17,7 +17,7 @@ function App() {
     const count = 10000;
     let store = createStore(dataReducer);
     for (let i = 0; i < count; i++) {
-        store.dispatch({type: "add"})
+        store.dispatch({ type: "add" })
     }
     const parentRef = React.useRef();
     const rowVirtualizer = useVirtualizer({
@@ -25,8 +25,6 @@ function App() {
         getScrollElement: () => parentRef.current,
         estimateSize: () => 4,
     });
-
-    console.log(store.getState());
 
     return (
         <div className="App" style={{}}>
