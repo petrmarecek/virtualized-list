@@ -3,24 +3,30 @@ import React from "react";
 
 import {useVirtualizer} from "@tanstack/react-virtual";
 
+import { createStore } from '@reduxjs/toolkit';
+
+
+function dataReducer(state = {value: []}, action){
+    if(action.type === "add"){
+        state.value.push({id: state.value.length, subject: "ukol" + state.value.length});
+        return state;
+    }
+}
 
 function App() {
-    let testData = [];
     const count = 10000;
+    let store = createStore(dataReducer);
     for (let i = 0; i < count; i++) {
-        testData.push({
-            id: i,
-            subject: "ukol" + i,
-        });
+        store.dispatch({type: "add"})
     }
     const parentRef = React.useRef();
     const rowVirtualizer = useVirtualizer({
         count: count,
         getScrollElement: () => parentRef.current,
         estimateSize: () => 4,
-    })
+    });
 
-    console.log(testData)
+    console.log(store.getState());
 
     return (
         <div className="App" style={{}}>
@@ -30,7 +36,7 @@ function App() {
                 position: 'relative',
             }}>
                 {rowVirtualizer.getVirtualItems().map((itm) => (
-                    <div>{testData[itm.index].subject}</div>
+                    <div>{store.getState().value[itm.index].subject}</div>
                 ))}
             </div>
         </div>
